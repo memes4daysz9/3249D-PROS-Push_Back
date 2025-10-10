@@ -24,6 +24,7 @@ extern void Odometry(){
     double DistanceOffset;
     double AvgHeading;
     constexpr double GearRatio = (4/5);
+    
 
     double ArcCenter;
     uint64_t Time;
@@ -32,12 +33,14 @@ extern void Odometry(){
     pros::Motor LeftEnc(1,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
     pros::Motor RightEnc(1,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
 
+    pros::screen::print(pros::E_TEXT_MEDIUM,2, "Odometry has started, GLHF");
+
     while (true)
     {
         
-        RDeg = RightEnc.position() * GearRatio;
-        LDeg = LeftEnc.position() * GearRatio;                 //local variables
-
+        RDeg = RightEnc.get_position() * GearRatio;
+        LDeg = LeftEnc.get_position() * GearRatio;                 //local variables
+ 
 
         DeltaLeft = LDeg - LastL;
         DeltaRight = RDeg - LastR;                    //Deltas
@@ -68,7 +71,12 @@ extern void Odometry(){
 
         X += ((LocalOffset[0] * cos(AvgHeading)) - (LocalOffset[1] * sin(AvgHeading)));
         Y += ((LocalOffset[0] * sin(AvgHeading)) + (LocalOffset[1] * cos(AvgHeading)));//                  Applying them
+        
+        pros::delay(5);//forces the driver task to run, otherwise Jackson won't be able to drive :(
 
+        double LastL = LDeg;
+        double LastR = RDeg;
+        double LastHeading = DeltaHeading;
 
 
         
