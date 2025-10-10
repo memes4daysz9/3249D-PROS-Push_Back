@@ -14,8 +14,10 @@
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::set_text(1, "latest Time working on the code: 10:43PM");
+	pros::delay(150); // this makes sure system devices initialize before this, ironically itll just skip things in here bc RTOS and the screen arent initialized yet
+	pros::screen::set_pen(0x00ffffff);
+	pros::screen::print(pros::E_TEXT_MEDIUM,1, "latest Time working on the code: 10:43PM");
+	pros::Task OdomTask(Odometry,"Odom"); //adds the odometry task to the stack of tasks
 }
 
 /**
@@ -47,7 +49,7 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {} // to be moved to another file
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -74,6 +76,10 @@ void opcontrol()
 	float left; // Left side output
 	float right;// Right side output
 	const float curve = 0.75; // the input control curve
+	float heading;
+	float x;		//local variables
+	float y;
+
 
 
 	while (true) 
@@ -86,6 +92,14 @@ void opcontrol()
 
 		LeftMG.move((100*(((1-curve)*left)/100+(curve*pow(left/100,7)))));
 		RightMG.move((100*(((1-curve)*right)/100+(curve*pow(right/100,7)))));
+
+		
+		heading = (float)Heading.load();
+		x = (float)X.load();			//loading the atomic variable, whenever its safe, then put it to a local variable
+		y = (float)Y.load();
+
+		pros::screen::print(pros::E_TEXT_MEDIUM,3, "X: %f, Y: %f, Heading: %f" , x, y, heading);
+
 		pros::delay(20);
 	}
 }

@@ -13,8 +13,10 @@ SRCDIR=$(ROOT)/src
 INCDIR=$(ROOT)/include
 
 WARNFLAGS+=
-EXTRA_CFLAGS=
-EXTRA_CXXFLAGS=
+EXTRA_CFLAGS=-O2    
+#O2 optimizes the code, with the tradeoff being compilation speed
+#with -Ofast and -O3 you can get into problems with division getting in your way
+EXTRA_CXXFLAGS=-O2
 
 # Set to 1 to enable hot/cold linking
 USE_PACKAGE:=1
