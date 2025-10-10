@@ -62,7 +62,8 @@ void autonomous() {}
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
-void opcontrol() {
+void opcontrol()
+{
 
 	pros::Controller MainCont(pros::E_CONTROLLER_MASTER);
 	pros::MotorGroup LeftMG({1, 3, 5});    
@@ -75,7 +76,8 @@ void opcontrol() {
 	const float curve = 0.75; // the input control curve
 
 
-	while (true) {
+	while (true) 
+	{
 		F = MainCont.get_analog(ANALOG_LEFT_Y);
 		T = MainCont.get_analog(ANALOG_RIGHT_X);
 
