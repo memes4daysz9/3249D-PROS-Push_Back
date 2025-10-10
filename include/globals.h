@@ -30,6 +30,11 @@ extern void CreateFile();
 extern void Odometry();
 extern uint64_t DeltaTime;
 extern uint64_t OdomCount;
-extern const int IntakeTrackLength;
 extern float RotationsDoneIntake;
-extern bool IntakeOverride;
+extern std::atomic<bool> UtilityMode;//true = intake, false = railgun
+extern std::atomic<bool> RGReady;// true if the RailGun is Ready to fire at the set amount
+
+extern std::atomic<int> ChargeAmount; // how many balls will the railgun shoot
+
+#define UtilityMotorA 7
+#define UtilityMotorB 8

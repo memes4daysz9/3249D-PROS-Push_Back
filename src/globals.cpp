@@ -15,9 +15,12 @@ extern std::atomic<double> Y = 0;       //atomics keep things thread safe, as th
 extern std::atomic<double> Heading = 0;
 extern uint64_t DeltaTime = 0;
 extern uint64_t OdomCount = 0;
-extern const int IntakeTrackLength = 0; // unkown YET. im too lazy to do calculations. The length from the beginning of bot to the end using the cable, not the tread length
-extern float RotationsDoneIntake = 0; // for auto PTO
-extern bool IntakeOverride = false;
+
+extern std::atomic<bool> UtilityMode = false;
+//true = intake, false = railgun
+extern std::atomic<int> ChargeAmount = 0; // how many balls will the railgun shoot
+
+extern std::atomic<bool> RGReady = false;// true if the RailGun is Ready to fire at the set amount
 
 extern double InchesToDegrees(float distance){return distance/((Pi * diameter)/360);}
 
@@ -32,3 +35,4 @@ extern double RadToDeg(double x) {
 }
 
 extern int sgn(double x){return (x>0) - (x<0);}
+

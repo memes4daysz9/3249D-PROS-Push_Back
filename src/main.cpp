@@ -1,5 +1,4 @@
 #include "main.h"
-
 /**
  * A callback function for LLEMU's center button.
  *
@@ -65,56 +64,168 @@ void autonomous() {} // to be moved to another file
  * task, not resume it from where it left off.
  */
 
+float CalcChargeAmt(float Input)
+{
+	//assuming that the power of the gun is exponential, we can use the sqrt to get how much to charge the gun using an input of how many balls we wanna put in
+	int Base = 200;//in degrees how much it rotates to preform 1 ball
+	return sqrt(Input) * Base;
+}
+
+
+
+void Shoot()
+{
+	pros::adi::DigitalOut ReleasePiston(8);
+	ReleasePiston.set_value(0); // fire
+	pros::delay(1000);
+	ReleasePiston.set_value(1); // reset
+}
+
+void Railgun()//seperate always running thread
+{
+	pros::Motor UtilityA(UtilityMotorA,pros::v5::MotorGearset::blue,pros::v5::MotorEncoderUnits::degrees);
+	pros::Motor UtilityB(UtilityMotorB,pros::v5::MotorGearset::blue,pros::v5::MotorEncoderUnits::degrees);
+	pros::adi::Encoder RailgunEnc (3, 4, false);
+	pros::Controller MainCont(pros::E_CONTROLLER_MASTER);
+	int LocalBalls = 0; // local variable for ChargeAmount
+	int LastChange = 0; //delta for this, to detect when a new value is there
+	int Target = CalcChargeAmt(ChargeAmount);
+	int Init = 0;
+	int error = RailgunEnc.get_value() - Target;
+	const int Tolerance = 15;
+
+	while (true)
+	{
+		if (!UtilityMode) //not intaking, start charging railgun
+		{
+			LocalBalls = ChargeAmount.load();
+
+			error = RailgunEnc.get_value() - Target;
+
+			if (error > Tolerance)
+			{
+				UtilityA.move(-127);
+				UtilityB.move(-127);//voltage
+				RGReady = false;
+			}else
+			{
+				UtilityA.move(0);
+				UtilityB.move(0); // stop
+				RGReady = true;
+			}
+
+			if (MainCont.get_digital(pros::E_CONTROLLER_DIGITAL_R2) && RGReady)// to be updated with real number
+			{
+				RailgunEnc.reset();
+				Shoot();
+			}
+			if (LocalBalls != LastChange) //update the target
+			{
+				Target = CalcChargeAmt(ChargeAmount);
+			}
+		}
+		LastChange = LocalBalls;
+		pros::delay(500);
+	}	
+}
+
+
 
 void Intake() // intended to be a seperate thread
 {
-	pros::Controller MainCont(pros::E_CONTROLLER_MASTER);
-	int Timeout = 300;//milliseconds till it switches from Singular to Hold to intake
+	
+	pros::Controller MainCont(pros::E_CONTROLLER_MASTER);	
+	//for now, assume that CW is intake, CCW is railgun + outtake
+	pros::Motor UtilityA(UtilityMotorA,pros::v5::MotorGearset::blue,pros::v5::MotorEncoderUnits::degrees);
+	pros::Motor UtilityB(UtilityMotorB,pros::v5::MotorGearset::blue,pros::v5::MotorEncoderUnits::degrees);
+
+	pros::adi::Encoder IntakeRotation({ 11, 5, 6}, false); // no 6 7 jokes :(
+					//expander port, top port, bottom port
+
 	bool Button = MainCont.get_digital(pros::E_CONTROLLER_DIGITAL_A);
+	const int InitialDegrees = IntakeRotation.get_value(); // the starting position at the start of the funciton. used for relative movements
 	const int DegreesPer = 180;//temp magic number, the motor should spin this amount to intake 1 ball
-	int TimeSinceCall = 0;// in ms
+	int error = IntakeRotation.get_value() - InitialDegrees; // how far the intake has rotated from the initial position
+	const int Tolerance = 5; // Degrees of error allowed
 
-	while (Button)
+
+	//imma only allow 1 thread to access Utility motors at a time
+	UtilityMode = true; // force railgun to stop charging
+	UtilityA.move(127);
+	UtilityB.move(127);//voltage
+
+	while (abs(error) > Tolerance)
 	{
-		Button = MainCont.get_digital(pros::E_CONTROLLER_DIGITAL_A);
-
-		pros::Task::delay_until(pros::millis, 50);// every 50ms, loop this again till called again
-
+		error = IntakeRotation.get_value() - InitialDegrees;
+		pros::delay(20);
 	}
+	Button = MainCont.get_digital(pros::E_CONTROLLER_DIGITAL_A);
+	if (Button) Intake(); // if the button is still held, restart the intake function
+	UtilityA.move(0);
+	UtilityB.move(0);
+	UtilityMode = false; // allow railgun to charge again
 
 }
+
 
 
 void opcontrol()
 {
 
 	pros::Controller MainCont(pros::E_CONTROLLER_MASTER);
-	pros::MotorGroup LeftMG({1, 3, 5});    
-	pros::MotorGroup RightMG({2, 4, 6});  
+	pros::MotorGroup LeftMG({1, 3, 5});
+	pros::MotorGroup RightMG({2, 4, 6});
 
 	float F; // Forward input from controller
 	float T;// Turning input from controller
 	float left; // Left side output
 	float right;// Right side output
 	const float curve = 0.75; // the input control curve
+	const int mod = 7;// the exponent for the curve, higher = more curve
 	float heading;
 	float x;		//local variables
 	float y;
-
+	int LocalBalls; // local variable for ChargeAmount
+	bool BallincHeld = false;
 
 
 	while (true) 
 	{
+
+		/*			Drivetrain Functions			*/
+
 		F = MainCont.get_analog(ANALOG_LEFT_Y);
 		T = MainCont.get_analog(ANALOG_RIGHT_X);
 
 		left = F + T;
 		right = F - T;
 
-		LeftMG.move((100*(((1-curve)*left)/100+(curve*pow(left/100,7)))));
-		RightMG.move((100*(((1-curve)*right)/100+(curve*pow(right/100,7)))));
+		LeftMG.move((100*(((1-curve)*left)/100+(curve*pow(left/100,mod)))));
+		RightMG.move((100*(((1-curve)*right)/100+(curve*pow(right/100,mod)))));
 
-		
+		/*			Utility Motors Functions			*/
+
+		if (MainCont.get_digital(pros::E_CONTROLLER_DIGITAL_UP) && !BallincHeld)
+		{
+			LocalBalls++;
+			BallincHeld = true;
+			
+		}else if( MainCont.get_digital(pros::E_CONTROLLER_DIGITAL_UP)  && !BallincHeld) //sets the ball count for the railgun to be set to
+		{
+			LocalBalls--;
+			BallincHeld = true;
+		}else 
+		{
+			BallincHeld = false;
+		}
+
+		if (MainCont.get_digital(pros::E_CONTROLLER_DIGITAL_A) && !UtilityMode) // if the button is pressed and the intake isnt already running
+		{
+			pros::Task IntakeTask(Intake,"Intake");
+		}
+
+
+		/*			Screen Functions			*/
 		heading = (float)Heading.load();
 		x = (float)X.load();			//loading the atomic variable, whenever its safe, then put it to a local variable
 		y = (float)Y.load();
