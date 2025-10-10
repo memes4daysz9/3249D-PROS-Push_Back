@@ -15,7 +15,7 @@
  */
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "latest Time working on the code: 10:43PM");
+	pros::lcd::set_text(1, "latest Time working on the code: 1:05AM");
 }
 
 /**
@@ -62,6 +62,27 @@ void autonomous() {}
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+
+
+void Intake() // intended to be a seperate thread
+{
+	pros::Controller MainCont(pros::E_CONTROLLER_MASTER);
+	int Timeout = 300;//milliseconds till it switches from Singular to Hold to intake
+	bool Button = MainCont.get_digital(pros::E_CONTROLLER_DIGITAL_A);
+	const int DegreesPer = 180;//temp magic number, the motor should spin this amount to intake 1 ball
+	int TimeSinceCall = 0;// in ms
+
+	while (Button)
+	{
+		Button = MainCont.get_digital(pros::E_CONTROLLER_DIGITAL_A);
+
+		pros::Task::delay_until(pros::millis, 50);// every 50ms, loop this again till called again
+
+	}
+
+}
+
+
 void opcontrol()
 {
 
@@ -74,7 +95,7 @@ void opcontrol()
 	float left; // Left side output
 	float right;// Right side output
 	const float curve = 0.75; // the input control curve
-
+	bool IntakeSingular;//
 
 	while (true) 
 	{
