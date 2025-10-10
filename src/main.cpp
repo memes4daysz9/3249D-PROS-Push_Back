@@ -15,7 +15,7 @@
 void initialize() {
 	pros::delay(150); // this makes sure system devices initialize before this, ironically itll just skip things in here bc RTOS and the screen arent initialized yet
 	pros::screen::set_pen(0x00ffffff);
-	pros::screen::print(pros::E_TEXT_MEDIUM,1, "latest Time working on the code: 1:05");
+	pros::screen::print(pros::E_TEXT_MEDIUM,1, "latest Time working on the code: 1:05AM");
 	pros::Task OdomTask(Odometry,"Odom"); //adds the odometry task to the stack of tasks
 }
 
