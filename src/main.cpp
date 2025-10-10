@@ -24,7 +24,16 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() {}
+void disabled() 
+{
+	pros::Imu IMUa(12);
+    pros::Imu IMUb(13);
+
+	IMUa.reset(false); // dont wait
+	IMUb.reset(true); // wait, so both are done by the time this is done
+	IMUa.set_data_rate(5);
+	IMUb.set_data_rate(5);
+}
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
@@ -142,7 +151,7 @@ void Intake() // intended to be a seperate thread
 	pros::adi::Encoder IntakeRotation({ 11, 5, 6}, false); // no 6 7 jokes :(
 					//expander port, top port, bottom port
 
-	bool Button = MainCont.get_digital(pros::E_CONTROLLER_DIGITAL_A);
+	bool Button = MainCont.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
 	const int InitialDegrees = IntakeRotation.get_value(); // the starting position at the start of the funciton. used for relative movements
 	const int DegreesPer = 180;//temp magic number, the motor should spin this amount to intake 1 ball
 	int error = IntakeRotation.get_value() - InitialDegrees; // how far the intake has rotated from the initial position
