@@ -4,7 +4,8 @@
 extern constexpr double diameter = 3.25;
 extern constexpr double radius = diameter/2;
 extern constexpr double TrackLength = 16;
-extern constexpr double Tolerance = 10;
+extern constexpr double StraightTolerance = 10;
+extern constexpr double RotationTolerance = 5;
 extern double kP = 10;
 extern double kI = 0.7;
 extern double kD = 3;
