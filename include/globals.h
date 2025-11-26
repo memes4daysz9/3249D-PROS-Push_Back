@@ -39,3 +39,7 @@ extern std::atomic<int> ChargeAmount; // how many balls will the railgun shoot
 
 #define UtilityMotorA 7
 #define UtilityMotorB 8
+
+
+extern bool Rel_Rotate(double Degrees);
+extern bool Rel_Move(double Distance);

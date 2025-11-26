@@ -27,12 +27,12 @@ void initialize() {
 void disabled() 
 {
 	pros::Imu IMUa(12);
-    pros::Imu IMUb(13);
+    //pros::Imu IMUb(13);
 
-	IMUa.reset(false); // dont wait
-	IMUb.reset(true); // wait, so both are done by the time this is done
+	IMUa.reset(true); // dont wait
+	//IMUb.reset(true); // wait, so both are done by the time this is done
 	IMUa.set_data_rate(5);
-	IMUb.set_data_rate(5);
+	//IMUb.set_data_rate(5);
 }
 
 /**
@@ -57,7 +57,15 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {} // to be moved to another file
+void autonomous() {
+
+	Rel_Rotate(15);
+	Rel_Rotate(-15);
+	Rel_Rotate(45);
+	Rel_Rotate(-45);
+	Rel_Rotate(90);
+	Rel_Rotate(-90);
+} // to be moved to another file
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -182,7 +190,7 @@ void opcontrol()
 {
 
 	pros::Controller MainCont(pros::E_CONTROLLER_MASTER);
-	pros::MotorGroup LeftMG({1, 3, 5});
+	pros::MotorGroup LeftMG({-1, -3, -5});
 	pros::MotorGroup RightMG({2, 4, 6});
 
 	float F; // Forward input from controller
@@ -196,6 +204,9 @@ void opcontrol()
 	float y;
 	int LocalBalls; // local variable for ChargeAmount
 	bool BallincHeld = false;
+	double LeftWattage = 0;
+	double RightWattage = 0;
+	double WattageDiff = 0;
 
 
 	while (true) 
@@ -238,8 +249,13 @@ void opcontrol()
 		heading = (float)Heading.load();
 		x = (float)X.load();			//loading the atomic variable, whenever its safe, then put it to a local variable
 		y = (float)Y.load();
+		LeftWattage = LeftMG.get_power();
+		RightWattage = RightMG.get_power();
 
 		pros::screen::print(pros::E_TEXT_MEDIUM,3, "X: %f, Y: %f, Heading: %f" , x, y, heading);
+		pros::screen::print(pros::E_TEXT_MEDIUM,4,"Total Power Left-Side: %f", LeftWattage);
+		pros::screen::print(pros::E_TEXT_MEDIUM,5,"Total Power Right-Side: %f", RightWattage);
+		pros::screen::print(pros::E_TEXT_MEDIUM,6,"Wattage Diff: %f", abs(RightWattage - LeftWattage) / 3);
 
 		pros::delay(20);
 	}

@@ -5,8 +5,8 @@ double loadXY(){
     return X.load() + Y.load();
 }
 
-bool Rel_Move(double Distance){
-    pros::MotorGroup LeftMG({1, 3, 5});
+extern bool Rel_Move(double Distance){
+	pros::MotorGroup LeftMG({-1, -3, -5});
 	pros::MotorGroup RightMG({2, 4, 6});
 
     pros::screen::print(pros::E_TEXT_MEDIUM,5, "Error:              ");
@@ -15,7 +15,7 @@ bool Rel_Move(double Distance){
     double CurDistance = 0;
 
     const int MinP = 650; //temp
-    const double kP = 0;
+    const double kP = 10;
     const double kI = 0;
     const double KD = 0;
     double i;
@@ -40,9 +40,13 @@ bool Rel_Move(double Distance){
     return true;
 }
 
+double GetDegrees(double H)
+{
+    
+}
 
-bool Rel_Rotate(double Degrees){
-    pros::MotorGroup LeftMG({1, 3, 5});
+extern bool Rel_Rotate(double Degrees){
+	pros::MotorGroup LeftMG({-1, -3, -5});
 	pros::MotorGroup RightMG({2, 4, 6});
     pros::screen::print(pros::E_TEXT_MEDIUM,5, "Error:              ");
 
@@ -50,7 +54,7 @@ bool Rel_Rotate(double Degrees){
     double CurHeading = 0;// localized value, sets to 0 everytime a new function is called to cercumvent the drift issue
 
     const int MinP = 650; // temp
-    const double kP = 0;
+    const double kP = 10;
     const double kI = 0;
     const double KD = 0;
     double i;

@@ -32,7 +32,7 @@ extern void Odometry(){
     pros::Motor LeftEnc(1,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
     pros::Motor RightEnc(1,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
     pros::Imu IMUa(12);
-    pros::Imu IMUb(13);
+    //pros::Imu IMUb(13);
 
     double IMUHeadingAvg = 0;
 
@@ -41,7 +41,7 @@ extern void Odometry(){
     while (true)
     {
 
-        IMUHeadingAvg = ((IMUa.get_heading() + IMUb.get_heading()) / 2);
+        IMUHeadingAvg = /*((IMUa.get_heading() + IMUb.get_heading()) / 2);*/ IMUa.get_heading();
 
         
         RDeg = RightEnc.get_position() * GearRatio;
