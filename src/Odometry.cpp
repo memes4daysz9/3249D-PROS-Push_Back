@@ -1,88 +1,93 @@
 #include "main.h"
 
+constexpr double TrackerRadius = 3.25 / 2;
+const double SL = 17.5;
+const double SR = 17.5;
+const double GearRatio = 0.8;
 
-const double TrackerRadius  = 1.375;//since its a tracking wheel, its different, trust
 
-const double SL = 7.5;// "the left-right distance from the tracking center to the left tracking wheel"
-const double SR = 7.5;// "the left-right distance from the tracking center to the right tracking wheel"
-const double SS = 2;// "the forward-backward distance from the tracking center to the back tracking wheel"
+void Odometry() {
 
-extern void Odometry(){
+    pros::MotorGroup LeftEnc({-1, -3, -5});
+    pros::MotorGroup RightEnc({2, 4, 6});
+    pros::Imu IMUa(12);
+    pros::Imu IMUb(11);
 
-    double DeltaLeft;
-    double DeltaRight;
-    double RDeg;
-    double LDeg; 
-    double RDis;
-    double LDis;
     double LastL = 0;
     double LastR = 0;
-    double LastHeading = 0;
-    double DeltaHeading = 0;
-    double LocalOffset[2]; // delta variants of x,y
-    double DistanceOffset;
-    double AvgHeading;
-    constexpr double GearRatio = (4/5);
+    double LastHeading = 0;      // radians
+    double IMUDeg;
+    double IMURad;
+    double LDeg;
+    double RDeg;
+    double DeltaLeft;
+    double DeltaRight;
+    double LDis;
+    double RDis;
+    double RHeading;
+
+    pros::screen::print(pros::E_TEXT_MEDIUM, 2, "Odometry started!");
+
+    while (IMUa.is_calibrating() || IMUb.is_calibrating()) {
+        pros::delay(10);
+    }
     
 
-    double ArcCenter;
-    uint64_t Time;
-    uint64_t LastTime;
+    while (true) {
 
-    pros::Motor LeftEnc(1,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
-    pros::Motor RightEnc(1,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
-    pros::Imu IMUa(12);
-    //pros::Imu IMUb(13);
-
-    double IMUHeadingAvg = 0;
-
-    pros::screen::print(pros::E_TEXT_MEDIUM,2, "Odometry has started, GLHF");
-
-    while (true)
-    {
-
-        IMUHeadingAvg = /*((IMUa.get_heading() + IMUb.get_heading()) / 2);*/ IMUa.get_heading();
+        // IMU Logic
+        //note, using a switch case like this isnt the best pratice, i just kinda wanted to learn it
+        switch (abs(IMUa.get_heading() - IMUb.get_heading()) > 0.1){ //if the difference is greater than a certain amount
+            case true:
+                if (IMUa.get_heading() > IMUb.get_heading()){ // effectivly disabling the IMU on port 12
+                    Heading = IMUb.get_heading();
+                }else{
+                    Heading = IMUa.get_heading();
+                }
+            case false:
+                Heading = (IMUa.get_heading() + IMUb.get_heading()) / 2;
+        }
 
         
+        IMURad = DegToRad(Heading);
+
+        LDeg = LeftEnc.get_position() * GearRatio;
         RDeg = RightEnc.get_position() * GearRatio;
-        LDeg = LeftEnc.get_position() * GearRatio;                 //local variables
- 
+        DeltaLeft  = LDeg - LastL;
+        DeltaRight = RDeg - LastR;
+        LDis = DegToRad(DeltaLeft)  * TrackerRadius;
+        RDis = DegToRad(DeltaRight) * TrackerRadius;
 
-        DeltaLeft = LDeg - LastL;
-        DeltaRight = RDeg - LastR;                    //Deltas
-
-        LDis = (DegToRad(DeltaLeft) * TrackerRadius); // Lr
-        RDis = (DegToRad(DeltaRight) * TrackerRadius);//Rr               Converting to distance
+        pros::screen::print(pros::E_TEXT_MEDIUM, 7,
+            "RDeg: %f   LDeg: %f", RDeg, LDeg);
 
 
-        DeltaHeading = RadToDeg(IMUHeadingAvg) - LastHeading;
+        double DeltaHeading = IMURad - LastHeading;
 
-        Heading = IMUHeadingAvg;//                         Using theta to get values for other things
-        
-        ArcCenter = (RDis + LDis) / 2;
+        RHeading = IMURad;
 
-        if (abs(DeltaHeading) < 1e-5) // straight
-        {
-            LocalOffset[0] = 0;
-            LocalOffset[1] = ArcCenter;
+        double ArcCenter = (RDis + LDis) / 2.0;
+
+        double LocalOffsetX, LocalOffsetY;
+
+        if (fabs(DeltaHeading) < 1e-6) {
+            // Straight
+            LocalOffsetX = 0;
+            LocalOffsetY = ArcCenter;
+        } else {
+            LocalOffsetX = (ArcCenter / DeltaHeading) * (1 - cos(DeltaHeading));
+            LocalOffsetY = (ArcCenter / DeltaHeading) * sin(DeltaHeading);
         }
-        else
-        {
-            LocalOffset[0] = ((ArcCenter / DeltaHeading) * (1 - cos(DeltaHeading)));
-            LocalOffset[1] = ((ArcCenter / DeltaHeading) * sin(DeltaHeading));
-        }
 
-        AvgHeading = (LastHeading + DeltaHeading) / 2;
+        double AvgHeading = LastHeading + DeltaHeading * 0.5;
 
-        X += ((LocalOffset[0] * cos(AvgHeading)) - (LocalOffset[1] * sin(AvgHeading)));
-        Y += ((LocalOffset[0] * sin(AvgHeading)) + (LocalOffset[1] * cos(AvgHeading)));//                  Applying them
-        
-        pros::delay(5);//forces the driver task to run, otherwise Jackson won't be able to drive :(
+        X += LocalOffsetX * cos(AvgHeading) - LocalOffsetY * sin(AvgHeading);
+        Y += LocalOffsetX * sin(AvgHeading) + LocalOffsetY * cos(AvgHeading);
 
         LastL = LDeg;
         LastR = RDeg;
-        LastHeading = DeltaHeading;
+        LastHeading = RHeading;
 
+        pros::delay(5);
     }
-
 }

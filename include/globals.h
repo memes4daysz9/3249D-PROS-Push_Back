@@ -43,3 +43,5 @@ extern std::atomic<int> ChargeAmount; // how many balls will the railgun shoot
 
 extern bool Rel_Rotate(double Degrees);
 extern bool Rel_Move(double Distance);
+extern void Finished();
+extern double GetDegrees(double H);
