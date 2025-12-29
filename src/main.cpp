@@ -16,13 +16,13 @@ void initialize() {
 	pros::delay(150); // this makes sure system devices initialize before this, ironically itll just skip things in here bc RTOS and the screen arent initialized yet
 	pros::screen::set_pen(0x00ffffff);
 	pros::screen::print(pros::E_TEXT_MEDIUM,1, "latest Time working on the code: 1:05AM");
-		pros::Imu IMUa(12);
-    //pros::Imu IMUb(13);
+	pros::Imu IMUa(12);
+    pros::Imu IMUb(13);
 
 	IMUa.reset(true);
-	//IMUb.reset(true);
+	IMUb.reset(true);
 	IMUa.set_data_rate(5);
-	//IMUb.set_data_rate(5);
+	IMUb.set_data_rate(5);
 	pros::Task OdomTask(Odometry,"Odom"); //adds the odometry task to the stack of tasks
 	pros::Motor BarMotor(7,pros::v5::MotorGears::red,pros::v5::MotorEncoderUnits::degrees);
 	BarMotor.set_brake_mode(MOTOR_BRAKE_HOLD);

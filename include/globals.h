@@ -23,6 +23,7 @@ extern double kD;
 extern std::atomic<double> X;
 extern std::atomic<double> Y;       //atomics keep things thread safe, as these numbers go through 2 threads
 extern std::atomic<double> Heading;
+extern std::atomic<double> OdomDistance;
 
 
 template<typename... Args>

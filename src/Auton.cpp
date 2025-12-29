@@ -6,37 +6,54 @@ double loadXY(){
 }
 
 extern bool Rel_Move(double Distance){
+    double pol = sgn(Distance);
+    // temp fixing the odom / wheel problem
+    Distance = (fabs(Distance) - ((0.18 * fabs(Distance)) - 0.9453)) * pol;
+    
+
 	pros::MotorGroup LeftMG({-1, -3, -5});
 	pros::MotorGroup RightMG({2, 4, 6});
 
-    pros::screen::print(pros::E_TEXT_MEDIUM,5, "Error:              ");
     
-    const double BaseDistance = loadXY();
+    const double BaseDistance = OdomDistance.load();
     double CurDistance = 0;
 
     const int MinP = 650; //temp
-    const double kP = 25;
-    const double kI = 0.01;
+    const double kP = 1;
+    const double kI = 0;
     const double KD = 0;
-    double i;
+    double i = 0;
     double Output;
 
-    const double Target = InchesToDegrees(Distance);
-    double error = Target - InchesToDegrees(CurDistance);
+    const double Target = Distance;
+    double error = Target - CurDistance;
     double LastError = 0;
+    pros::screen::print(pros::E_TEXT_MEDIUM,5, "Error:  %f              ",error);
+    pros::screen::print(pros::E_TEXT_MEDIUM,4, "Distance: %f",pol);
+    
 
-    while (abs(error) > InchesToDegrees(StraightTolerance)){
-        CurDistance = loadXY() - BaseDistance;
-        error = Target - InchesToDegrees(CurDistance);
-        pros::screen::print(pros::E_TEXT_MEDIUM,5, "Error: %f" , error);
-        i = (i + error) * kI;
 
-        Output = (error * kP) + i + ((error - LastError) * kD) + int(MinP * sgn(error));
+while (abs(error) > StraightTolerance) {
+    CurDistance = OdomDistance.load() - BaseDistance;
+    error = Target - CurDistance;
+    pros::screen::print(pros::E_TEXT_MEDIUM,5, "Eroor:  %f", error);
 
-        LeftMG.move_voltage(Output);
-        RightMG.move_voltage(Output);
-        LastError = error;
-    }
+    i += error;
+    double Output =
+        (error * kP) +
+        (i * kI) +
+        ((error - LastError) * kD) +
+        (MinP * sgn(error));
+
+    Output = std::clamp(Output, -12000.0, 12000.0);
+
+    LeftMG.move_voltage(Output);
+    RightMG.move_voltage(Output);
+
+    LastError = error;
+    pros::delay(10);
+}
+    OdomDistance.store(0);// resets value for next loop
     return true;
 }
 

@@ -67,7 +67,7 @@ void Odometry() {
         RHeading = IMURad;
 
         double ArcCenter = (RDis + LDis) / 2.0;
-
+        OdomDistance.store(OdomDistance.load() + ArcCenter);
         double LocalOffsetX, LocalOffsetY;
 
         if (fabs(DeltaHeading) < 1e-6) {
