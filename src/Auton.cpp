@@ -8,7 +8,8 @@ double loadXY(){
 extern bool Rel_Move(double Distance){
     double pol = sgn(Distance);
     // temp fixing the odom / wheel problem
-    Distance = (fabs(Distance) - ((0.18 * fabs(Distance)) - 0.9453)) * pol;
+    Distance = (fabs(Distance) - ((0.18 * fabs(Distance)) - 0.9453)) * pol; // we DO NOT TOUCH THIS
+    //theres more magic in these numbers than normal magic numbers
     
 
 	pros::MotorGroup LeftMG({-1, -3, -5});
@@ -19,7 +20,7 @@ extern bool Rel_Move(double Distance){
     double CurDistance = 0;
 
     const int MinP = 650; //temp
-    const double kP = 1;
+    const double kP = 250;
     const double kI = 0;
     const double KD = 0;
     double i = 0;
