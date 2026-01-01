@@ -22,6 +22,7 @@ void Odometry() {
     double RDeg;
     double DeltaLeft;
     double DeltaRight;
+    double DeltaHeading;
     double LDis;
     double RDis;
     double RHeading;
@@ -37,17 +38,18 @@ void Odometry() {
 
         // IMU Logic
         //note, using a switch case like this isnt the best pratice, i just kinda wanted to learn it
-        switch (abs(IMUa.get_heading() - IMUb.get_heading()) > 0.1){ //if the difference is greater than a certain amount
+        switch (abs(IMUa.get_rotation() - IMUb.get_rotation()) > 0.1){ //if the difference is greater than a certain amount
             case true:
-                if (IMUa.get_heading() > IMUb.get_heading()){ // effectivly disabling the IMU on port 12
-                    Heading = IMUb.get_heading();
+                if (IMUa.get_rotation() > IMUb.get_rotation()){ // effectivly disabling the IMU on port 12
+                    Heading = IMUb.get_rotation();
                 }else{
-                    Heading = IMUa.get_heading();
+                    Heading = IMUa.get_rotation();
                 }
             case false:
-                Heading = (IMUa.get_heading() + IMUb.get_heading()) / 2;
+                Heading = (IMUa.get_rotation() + IMUb.get_rotation()) / 2;
         }
-
+       
+        
         
         IMURad = DegToRad(Heading);
 
@@ -58,17 +60,16 @@ void Odometry() {
         LDis = DegToRad(DeltaLeft)  * TrackerRadius;
         RDis = DegToRad(DeltaRight) * TrackerRadius;
 
-        pros::screen::print(pros::E_TEXT_MEDIUM, 7,
-            "RDeg: %f   LDeg: %f", RDeg, LDeg);
+        pros::screen::print(pros::E_TEXT_MEDIUM, 7,"RDeg: %f   LDeg: %f", RDeg, LDeg);
 
 
-        double DeltaHeading = IMURad - LastHeading;
+        //DeltaHeading = IMURad - LastHeading;
 
-        RHeading = IMURad;
+        //RHeading = IMURad;
 
         double ArcCenter = (RDis + LDis) / 2.0;
         OdomDistance.store(OdomDistance.load() + ArcCenter);
-        double LocalOffsetX, LocalOffsetY;
+        /*double LocalOffsetX, LocalOffsetY;
 
         if (fabs(DeltaHeading) < 1e-6) {
             // Straight
@@ -83,11 +84,12 @@ void Odometry() {
 
         X += LocalOffsetX * cos(AvgHeading) - LocalOffsetY * sin(AvgHeading);
         Y += LocalOffsetX * sin(AvgHeading) + LocalOffsetY * cos(AvgHeading);
-
+        */
         LastL = LDeg;
         LastR = RDeg;
-        LastHeading = RHeading;
+        //LastHeading
+        /*LastHeading = RHeading;*/
 
-        pros::delay(5);
+        pros::delay(1);
     }
 }

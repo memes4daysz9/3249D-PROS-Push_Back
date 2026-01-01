@@ -46,3 +46,16 @@ extern bool Rel_Rotate(double Degrees);
 extern bool Rel_Move(double Distance);
 extern void Finished();
 extern double GetDegrees(double H);
+
+extern pros::controller_digital_e_t IntakeButton;
+extern pros::controller_digital_e_t InverseIntakeButton;
+extern pros::controller_digital_e_t HoodButton;
+extern pros::controller_digital_e_t InverseHoodButton;
+extern pros::controller_digital_e_t ScoreButton;
+extern pros::controller_digital_e_t InverseScoreButton;
+extern pros::controller_digital_e_t WingsButton;
+extern pros::controller_digital_e_t InverseWingsButton;
+extern pros::controller_digital_e_t MiddleScoreButton;
+extern pros::controller_digital_e_t InverseMiddleScoreButton;
+extern pros::controller_digital_e_t MatchLoaderButton;
+extern pros::controller_digital_e_t InverseMatchLoaderButton;

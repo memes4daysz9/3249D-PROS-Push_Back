@@ -4,8 +4,8 @@
 extern constexpr double diameter = 3.25;
 extern constexpr double radius = diameter/2;
 extern constexpr double TrackLength = 16;
-extern constexpr double StraightTolerance = 0.01;
-extern constexpr double RotationTolerance = 5;
+extern constexpr double StraightTolerance = 0.05;
+extern constexpr double RotationTolerance = 0.5;
 extern double kP = 10;
 extern double kI = 0.7;
 extern double kD = 3;
@@ -38,3 +38,10 @@ extern double RadToDeg(double x) {
 
 extern int sgn(double x){return (x>0) - (x<0);}
 
+
+extern pros::controller_digital_e_t IntakeButton;
+extern pros::controller_digital_e_t HoodButton;
+extern pros::controller_digital_e_t ScoreButton;
+extern pros::controller_digital_e_t WingsButton;
+extern pros::controller_digital_e_t MiddleScoreButton;
+extern pros::controller_digital_e_t MatchLoaderButton;

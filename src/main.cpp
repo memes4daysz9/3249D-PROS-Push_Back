@@ -65,10 +65,7 @@ void competition_initialize() {}
 
 /*			Rotation PID testing			*/
 
-/*void autonomous() {
-	pros::Motor BarMotor(7,pros::v5::MotorGears::red,pros::v5::MotorEncoderUnits::degrees);
-	BarMotor.move_absolute(30,50);
-	pros::delay(500);
+void autonomous() {
 	Rel_Rotate(15);
 	Rel_Rotate(-15);
 	Rel_Rotate(45);
@@ -79,12 +76,11 @@ void competition_initialize() {}
 	Rel_Rotate(-145);
 	Rel_Rotate(180);
 	Rel_Rotate(-180);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
-	Finished();
-} */
+} 
 // to be moved to another file
 
 /*			Straight			*/
-void autonomous()
+/*void autonomous()
 {
 	pros::Motor IntakeMotor(7,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
 	pros::Motor HighGoalMotor(8,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
@@ -99,7 +95,14 @@ void autonomous()
 	Rel_Move(-40);
 	Rel_Move(65);
 	Rel_Move(-65);
-}
+}*/
+
+/*void autonomous()
+{
+	Rel_Move(20);
+	Rel_Rotate(180);
+	Rel_Move(20);
+}*/
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -157,13 +160,13 @@ void opcontrol()
 		RightMG.move((100*(((1-curve)*right)/100+(curve*pow(right/100,mod)))));
 
 		/*			4Bar + Intake Functions			*/
-		BarMotor.move_velocity((MainCont.get_digital(DIGITAL_R1) - MainCont.get_digital(DIGITAL_R2)) * 100); // temp
+		BarMotor.move_velocity((MainCont.get_digital(HoodButton) - MainCont.get_digital(DIGITAL_R2)) * 100); // temp
 
 		IntakeMotor.move_velocity((MainCont.get_digital(DIGITAL_L2) - MainCont.get_digital(DIGITAL_L1)) * 600);
 		
 
 		/*			Screen Functions			*/
-		heading = (float)GetDegrees(Heading.load());
+		heading = (float)Heading.load();
 		x = X.load();			//loading the atomic variable, whenever its safe, then put it to a local variable
 		y = Y.load();
 		LeftWattage = LeftMG.get_power();
