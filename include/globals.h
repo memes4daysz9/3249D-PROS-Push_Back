@@ -53,9 +53,7 @@ extern pros::controller_digital_e_t HoodButton;
 extern pros::controller_digital_e_t InverseHoodButton;
 extern pros::controller_digital_e_t ScoreButton;
 extern pros::controller_digital_e_t InverseScoreButton;
+//toggleables
 extern pros::controller_digital_e_t WingsButton;
-extern pros::controller_digital_e_t InverseWingsButton;
 extern pros::controller_digital_e_t MiddleScoreButton;
-extern pros::controller_digital_e_t InverseMiddleScoreButton;
 extern pros::controller_digital_e_t MatchLoaderButton;
-extern pros::controller_digital_e_t InverseMatchLoaderButton;

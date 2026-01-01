@@ -39,9 +39,13 @@ extern double RadToDeg(double x) {
 extern int sgn(double x){return (x>0) - (x<0);}
 
 
-extern pros::controller_digital_e_t IntakeButton;
-extern pros::controller_digital_e_t HoodButton;
-extern pros::controller_digital_e_t ScoreButton;
-extern pros::controller_digital_e_t WingsButton;
-extern pros::controller_digital_e_t MiddleScoreButton;
-extern pros::controller_digital_e_t MatchLoaderButton;
+extern pros::controller_digital_e_t IntakeButton = pros::E_CONTROLLER_DIGITAL_R1;// right paddle
+extern pros::controller_digital_e_t InverseIntakeButton = pros::E_CONTROLLER_DIGITAL_R2; //left paddle
+extern pros::controller_digital_e_t HoodButton = pros::E_CONTROLLER_DIGITAL_L1;
+extern pros::controller_digital_e_t InverseHoodButton = pros::E_CONTROLLER_DIGITAL_L2;
+extern pros::controller_digital_e_t ScoreButton = pros::E_CONTROLLER_DIGITAL_Y; // right paddle
+extern pros::controller_digital_e_t InverseScoreButton = pros::E_CONTROLLER_DIGITAL_RIGHT;//left paddle
+//toggleables
+extern pros::controller_digital_e_t WingsButton = pros::E_CONTROLLER_DIGITAL_DOWN;//left bottom thingy
+extern pros::controller_digital_e_t MiddleScoreButton = pros::E_CONTROLLER_DIGITAL_A;
+extern pros::controller_digital_e_t MatchLoaderButton = pros::E_CONTROLLER_DIGITAL_B; // right bottom thingy
