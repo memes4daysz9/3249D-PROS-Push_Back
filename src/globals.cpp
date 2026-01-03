@@ -6,10 +6,6 @@ extern constexpr double radius = diameter/2;
 extern constexpr double TrackLength = 16;
 extern constexpr double StraightTolerance = 0.05;
 extern constexpr double RotationTolerance = 0.5;
-extern double kP = 10;
-extern double kI = 0.7;
-extern double kD = 3;
-extern bool AbortAuton = true;
 extern const double Pi = 3.141592653;
 //extern const double Pi = 3.14;
 extern std::atomic<double> X = 0;
@@ -39,6 +35,7 @@ extern double RadToDeg(double x) {
 extern int sgn(double x){return (x>0) - (x<0);}
 
 
+
 extern pros::controller_digital_e_t IntakeButton = pros::E_CONTROLLER_DIGITAL_R1;// right paddle
 extern pros::controller_digital_e_t InverseIntakeButton = pros::E_CONTROLLER_DIGITAL_R2; //left paddle
 extern pros::controller_digital_e_t HoodButton = pros::E_CONTROLLER_DIGITAL_L1;
@@ -49,3 +46,5 @@ extern pros::controller_digital_e_t InverseScoreButton = pros::E_CONTROLLER_DIGI
 extern pros::controller_digital_e_t WingsButton = pros::E_CONTROLLER_DIGITAL_DOWN;//left bottom thingy
 extern pros::controller_digital_e_t MiddleScoreButton = pros::E_CONTROLLER_DIGITAL_A;
 extern pros::controller_digital_e_t MatchLoaderButton = pros::E_CONTROLLER_DIGITAL_B; // right bottom thingy
+
+

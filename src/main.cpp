@@ -15,7 +15,7 @@
 void initialize() {
 	pros::delay(150); // this makes sure system devices initialize before this, ironically itll just skip things in here bc RTOS and the screen arent initialized yet
 	pros::screen::set_pen(0x00ffffff);
-	pros::screen::print(pros::E_TEXT_MEDIUM,1, "latest Time working on the code: 1:05AM");
+	pros::screen::print(pros::E_TEXT_MEDIUM,1, "latest Time working on the code: 2:33AM");
 	pros::Imu IMUa(12);
     pros::Imu IMUb(13);
 
@@ -124,12 +124,14 @@ void autonomous() {
 
 void opcontrol()
 {
-
 	pros::Controller MainCont(pros::E_CONTROLLER_MASTER);
 	pros::MotorGroup LeftMG({-1, -3, -5}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 	pros::MotorGroup RightMG({2, 4, 6}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-	pros::Motor BarMotor(7,pros::v5::MotorGears::red,pros::v5::MotorEncoderUnits::degrees);
+	pros::Motor HoodMotor(7,pros::v5::MotorGears::red,pros::v5::MotorEncoderUnits::degrees);
 	pros::Motor IntakeMotor(8,pros::v5::MotorGear::blue, pros::v5::MotorUnits::degrees);
+	pros::adi::Pneumatics WingsPiston('c',false); // starts retracted
+	pros::adi::Pneumatics MiddleScorePiston('b',true); // starts extended
+	pros::adi::Pneumatics MatchLoaderPiston('a',false);
 
 	float F; // Forward input from controller
 	float T;// Turning input from controller
@@ -144,7 +146,6 @@ void opcontrol()
 	double RightWattage = 0;
 	double WattageDiff = 0;
 	
-
 	while (true) 
 	{
 
@@ -159,11 +160,16 @@ void opcontrol()
 		LeftMG.move((100*(((1-curve)*left)/100+(curve*pow(left/100,mod)))));
 		RightMG.move((100*(((1-curve)*right)/100+(curve*pow(right/100,mod)))));
 
-		/*			4Bar + Intake Functions			*/
-		BarMotor.move_velocity((MainCont.get_digital(HoodButton) - MainCont.get_digital(DIGITAL_R2)) * 100); // temp
+		/*			Utility Motor Functions			*/
+		HoodMotor.move_velocity((MainCont.get_digital(HoodButton) - MainCont.get_digital(InverseHoodButton)) * 100); // temp
 
-		IntakeMotor.move_velocity((MainCont.get_digital(DIGITAL_L2) - MainCont.get_digital(DIGITAL_L1)) * 600);
+		IntakeMotor.move_velocity((MainCont.get_digital(IntakeButton) - MainCont.get_digital(InverseHoodButton)) * 600);
 		
+		/*			Piston Functions		*/
+		if (MainCont.get_digital(WingsButton)){WingsPiston.toggle();}
+		if (MainCont.get_digital(MiddleScoreButton)){MiddleScorePiston.toggle();}
+		if (MainCont.get_digital(MatchLoaderButton)){MatchLoaderPiston.toggle();}
+
 
 		/*			Screen Functions			*/
 		heading = (float)Heading.load();
