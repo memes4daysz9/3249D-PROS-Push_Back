@@ -42,6 +42,10 @@ extern pros::controller_digital_e_t HoodButton = pros::E_CONTROLLER_DIGITAL_L1;
 extern pros::controller_digital_e_t InverseHoodButton = pros::E_CONTROLLER_DIGITAL_L2;
 extern pros::controller_digital_e_t ScoreButton = pros::E_CONTROLLER_DIGITAL_Y; // right paddle
 extern pros::controller_digital_e_t InverseScoreButton = pros::E_CONTROLLER_DIGITAL_RIGHT;//left paddle
+
+extern pros::controller_digital_e_t PlayerSwapA = pros::E_CONTROLLER_DIGITAL_X; //both need to be pressed in order to swap
+extern pros::controller_digital_e_t PlayerSwapB = pros::E_CONTROLLER_DIGITAL_UP;
+
 //toggleables
 extern pros::controller_digital_e_t WingsButton = pros::E_CONTROLLER_DIGITAL_DOWN;//left bottom thingy
 extern pros::controller_digital_e_t MiddleScoreButton = pros::E_CONTROLLER_DIGITAL_A;

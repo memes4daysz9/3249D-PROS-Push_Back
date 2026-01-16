@@ -23,10 +23,7 @@ void initialize() {
 	IMUb.reset(true);
 	IMUa.set_data_rate(5);
 	IMUb.set_data_rate(5);
-	pros::Task OdomTask(Odometry,"Odom"); //adds the odometry task to the stack of tasks
-	pros::Motor BarMotor(7,pros::v5::MotorGears::red,pros::v5::MotorEncoderUnits::degrees);
-	BarMotor.set_brake_mode(MOTOR_BRAKE_HOLD);
-	
+	pros::Task OdomTask(Odometry,"Odom"); //adds the odometry task to the stack of tasks	
 }
 
 /**
@@ -65,7 +62,7 @@ void competition_initialize() {}
 
 /*			Rotation PID testing			*/
 
-void autonomous() {
+/*void autonomous() {
 	Rel_Rotate(15);
 	Rel_Rotate(-15);
 	Rel_Rotate(45);
@@ -76,7 +73,7 @@ void autonomous() {
 	Rel_Rotate(-145);
 	Rel_Rotate(180);
 	Rel_Rotate(-180);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
-} 
+}*/
 // to be moved to another file
 
 /*			Straight			*/
@@ -104,6 +101,130 @@ void autonomous() {
 	Rel_Move(20);
 }*/
 
+											/*			Left Side			*/
+
+/*void autonomous()
+{
+
+
+}*/
+
+
+											/*			Right Side			*/
+											
+void autonomous(){
+	pros::Motor HoodMotor(7,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
+	pros::Motor IntakeMotor(8,pros::v5::MotorGear::blue, pros::v5::MotorUnits::degrees);
+	pros::adi::Pneumatics WingsPiston('c',false); // starts retracted
+	pros::adi::Pneumatics MiddleScorePiston('b',true); // starts extended
+	pros::adi::Pneumatics MatchLoaderPiston('a',false);
+	pros::MotorGroup LeftMG({-1, -3, -5});
+	pros::MotorGroup RightMG({2, 4, 6});
+	Rel_Move(24);
+	Rel_Rotate(-5);
+	IntakeMotor.move_voltage(12000);
+	Rel_Move(3.25);
+	Rel_Rotate(-19);
+	Rel_Move(5);
+	Rel_Move(7);
+	Rel_Rotate(-114);
+	Rel_Move(36);
+	Rel_Rotate(-40);
+	Rel_Move(-20);
+	HoodMotor.move_voltage(12000);
+	pros::delay(1500);
+	HoodMotor.move_voltage(0);
+	Rel_Move(19);
+	MatchLoaderPiston.extend();
+	pros::delay(1500);
+	LeftMG.move_voltage(12000);
+	RightMG.move_voltage(12000);
+	pros::delay(250);
+	LeftMG.move_voltage(0);
+	RightMG.move_voltage(0);
+	MatchLoad(3);
+	//untested
+	Rel_Move(24);
+	HoodMotor.move_voltage(12000);
+	
+}
+
+/*void autonomous()
+{
+	pros::Motor HoodMotor(7,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
+	pros::Motor IntakeMotor(8,pros::v5::MotorGear::blue, pros::v5::MotorUnits::degrees);
+	pros::adi::Pneumatics WingsPiston('c',false); // starts retracted
+	pros::adi::Pneumatics MiddleScorePiston('b',true); // starts extended
+	pros::adi::Pneumatics MatchLoaderPiston('a',false);
+
+	Rel_Move(24);
+	Rel_Rotate(19);
+	IntakeMotor.move_voltage(12000);
+	Rel_Move(5);
+	Rel_Rotate(10);
+	Rel_Move(5);
+	Rel_Rotate(90);
+	Rel_Move(34);
+
+	Rel_Rotate(40);
+	MatchLoaderPiston.extend();
+	pros::delay(750);
+	Rel_Move(5.5);
+	MatchLoad(2);// 2 seconds
+	Rel_Move(-24);
+
+}*/
+
+
+											/*			Right Side AWP			*/
+/*void autonomous()
+{
+	pros::Motor HoodMotor(7,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
+	pros::Motor IntakeMotor(8,pros::v5::MotorGear::blue, pros::v5::MotorUnits::degrees);
+	pros::adi::Pneumatics WingsPiston('c',false); // starts retracted
+	pros::adi::Pneumatics MiddleScorePiston('b',true); // starts extended
+	pros::adi::Pneumatics MatchLoaderPiston('a',false);
+	
+	Rel_Move(60);
+	Rel_Rotate(-90);
+	MatchLoaderPiston.extend();
+	Rel_Move(21.5);
+	MatchLoad(2);
+	Rel_Move(-48);
+	MatchLoaderPiston.retract();
+	IntakeMotor.move_voltage(12000);
+	HoodMotor.move_voltage(12000);
+	pros::delay(3000);
+	HoodMotor.move_voltage(0);
+	Rel_Move(24);
+	
+	Rel_Rotate(145);
+	Rel_Move(24);
+	Rel_Rotate(5);
+	Rel_Move(5);
+	Rel_Move(-5);
+	Rel_Rotate(-10);
+	Rel_Move(5);
+	Rel_Move(-5);
+	IntakeMotor.move_voltage(0);
+	Rel_Rotate(5);
+	Rel_Move(18);
+	IntakeMotor.move_voltage(-12000);
+}
+*/
+
+				/*			Testing Matchloading			*/
+
+/*void autonomous()
+{
+	pros::adi::Pneumatics MatchLoaderPiston('a',false);
+	MatchLoaderPiston.extend();
+	pros::delay(1000);
+	MatchLoad(1.5);
+
+}*/
+
+
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -118,16 +239,34 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 
+bool Player2 = 0;
 
-
+bool Toggle2ndPlayer(){
+	pros::Controller MainCont(pros::E_CONTROLLER_MASTER);
+	pros::Controller SideCont(pros::E_CONTROLLER_PARTNER);
+	pros::MotorGroup LeftMG({-1, -3, -5}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+	pros::MotorGroup RightMG({2, 4, 6}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+	LeftMG.set_brake_mode(MOTOR_BRAKE_HOLD);
+    RightMG.set_brake_mode(MOTOR_BRAKE_HOLD);
+	LeftMG.brake();// so 
+	LeftMG.brake();
+	Player2 = ((Player2 + 1)*(Player2 < 1)); // 0 and 1
+	MainCont.rumble("..");
+	pros::delay(250);
+	SideCont.rumble(".."); 
+	LeftMG.set_brake_mode(MOTOR_BRAKE_COAST);
+    RightMG.set_brake_mode(MOTOR_BRAKE_COAST);
+	return true;
+}
 
 
 void opcontrol()
 {
 	pros::Controller MainCont(pros::E_CONTROLLER_MASTER);
+	pros::Controller SideCont(pros::E_CONTROLLER_PARTNER);
 	pros::MotorGroup LeftMG({-1, -3, -5}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 	pros::MotorGroup RightMG({2, 4, 6}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-	pros::Motor HoodMotor(7,pros::v5::MotorGears::red,pros::v5::MotorEncoderUnits::degrees);
+	pros::Motor HoodMotor(7,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
 	pros::Motor IntakeMotor(8,pros::v5::MotorGear::blue, pros::v5::MotorUnits::degrees);
 	pros::adi::Pneumatics WingsPiston('c',false); // starts retracted
 	pros::adi::Pneumatics MiddleScorePiston('b',true); // starts extended
@@ -145,30 +284,42 @@ void opcontrol()
 	double LeftWattage = 0;
 	double RightWattage = 0;
 	double WattageDiff = 0;
-	
+
 	while (true) 
 	{
 
 		/*			Drivetrain Functions			*/
+		if (Player2){
+			F = SideCont.get_analog(ANALOG_LEFT_Y);
+			T = SideCont.get_analog(ANALOG_RIGHT_X);
+		}else{
+			F = MainCont.get_analog(ANALOG_LEFT_Y);
+			T = MainCont.get_analog(ANALOG_RIGHT_X);
+		}
 
-		F = MainCont.get_analog(ANALOG_LEFT_Y);
-		T = MainCont.get_analog(ANALOG_RIGHT_X);
-
+		if ((MainCont.get_digital(PlayerSwapA)) && (SideCont.get_digital(PlayerSwapA)))
+		{
+			Toggle2ndPlayer();
+		}
 		left = F + T;
 		right = F - T;
 
 		LeftMG.move((100*(((1-curve)*left)/100+(curve*pow(left/100,mod)))));
 		RightMG.move((100*(((1-curve)*right)/100+(curve*pow(right/100,mod)))));
 
-		/*			Utility Motor Functions			*/
-		HoodMotor.move_velocity((MainCont.get_digital(HoodButton) - MainCont.get_digital(InverseHoodButton)) * 100); // temp
+		HoodMotor.move_velocity((MainCont.get_digital(HoodButton) - MainCont.get_digital(InverseHoodButton) + MainCont.get_digital(ScoreButton) - MainCont.get_digital(InverseScoreButton) - Player2) + (SideCont.get_digital(HoodButton) - SideCont.get_digital(InverseHoodButton) + SideCont.get_digital(ScoreButton) - SideCont.get_digital(InverseScoreButton) + Player2) * 600);
 
-		IntakeMotor.move_velocity((MainCont.get_digital(IntakeButton) - MainCont.get_digital(InverseHoodButton)) * 600);
+
+		/*			Utility Motor Functions			*/
+		HoodMotor.move_velocity(((MainCont.get_digital(HoodButton) + MainCont.get_digital(ScoreButton) + SideCont.get_digital(HoodButton) + SideCont.get_digital(ScoreButton)) - (MainCont.get_digital(InverseHoodButton) + MainCont.get_digital(InverseScoreButton) + SideCont.get_digital(InverseHoodButton) + SideCont.get_digital(InverseScoreButton))) * 600);
+		//slightly long
+		//handles both controllers Movements involving these two motors
+		IntakeMotor.move_velocity(((MainCont.get_digital(IntakeButton) + MainCont.get_digital(ScoreButton) + SideCont.get_digital(IntakeButton) + SideCont.get_digital(ScoreButton)) - (MainCont.get_digital(InverseIntakeButton) + MainCont.get_digital(InverseScoreButton) + SideCont.get_digital(InverseIntakeButton) + SideCont.get_digital(InverseScoreButton))) * 600);;
 		
 		/*			Piston Functions		*/
-		if (MainCont.get_digital(WingsButton)){WingsPiston.toggle();}
-		if (MainCont.get_digital(MiddleScoreButton)){MiddleScorePiston.toggle();}
-		if (MainCont.get_digital(MatchLoaderButton)){MatchLoaderPiston.toggle();}
+		if (MainCont.get_digital(WingsButton) || SideCont.get_digital(WingsButton)){WingsPiston.toggle(); pros::delay(150);}
+		if (MainCont.get_digital(MiddleScoreButton) || SideCont.get_digital(MiddleScoreButton)){MiddleScorePiston.toggle(); pros::delay(150);}
+		if (MainCont.get_digital(MatchLoaderButton) || SideCont.get_digital(MatchLoaderButton)){MatchLoaderPiston.toggle(); pros::delay(150);}
 
 
 		/*			Screen Functions			*/
@@ -182,8 +333,6 @@ void opcontrol()
 		pros::screen::print(pros::E_TEXT_MEDIUM,4,"Total Power Left-Side: %f", LeftWattage);
 		pros::screen::print(pros::E_TEXT_MEDIUM,5,"Total Power Right-Side: %f", RightWattage);
 		pros::screen::print(pros::E_TEXT_MEDIUM,6,"Wattage Diff: %f", abs(RightWattage - LeftWattage) / 3);
-
-		MainCont.print(0, 0, "% Power: %f", ((100*(((1-curve)*left)/100+(curve*pow(left/100,mod))))/4.31));
 
 		pros::delay(20);
 	}

@@ -44,7 +44,9 @@ extern std::atomic<int> ChargeAmount; // how many balls will the railgun shoot
 
 extern bool Rel_Rotate(double Degrees);
 extern bool Rel_Move(double Distance);
-extern void Finished();
+extern bool Abs_Rotate(double Degrees);
+extern bool AFinished(int Left, int Right);
+extern bool MatchLoad(int time);
 extern double GetDegrees(double H);
 
 extern pros::controller_digital_e_t IntakeButton;
@@ -57,3 +59,6 @@ extern pros::controller_digital_e_t InverseScoreButton;
 extern pros::controller_digital_e_t WingsButton;
 extern pros::controller_digital_e_t MiddleScoreButton;
 extern pros::controller_digital_e_t MatchLoaderButton;
+
+extern pros::controller_digital_e_t PlayerSwapA;
+extern pros::controller_digital_e_t PlayerSwapB;

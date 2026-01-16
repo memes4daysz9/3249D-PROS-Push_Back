@@ -38,7 +38,7 @@ void Odometry() {
 
         // IMU Logic
         //note, using a switch case like this isnt the best pratice, i just kinda wanted to learn it
-        switch (abs(IMUa.get_rotation() - IMUb.get_rotation()) > 0.1){ //if the difference is greater than a certain amount
+        /*switch (abs(IMUa.get_rotation() - IMUb.get_rotation()) > 0.1){ //if the difference is greater than a certain amount
             case true:
                 if (IMUa.get_rotation() > IMUb.get_rotation()){ // effectivly disabling the IMU on port 12
                     Heading = IMUb.get_rotation();
@@ -47,7 +47,8 @@ void Odometry() {
                 }
             case false:
                 Heading = (IMUa.get_rotation() + IMUb.get_rotation()) / 2;
-        }
+        }*/
+       Heading = IMUa.get_rotation();
        
         
         
@@ -90,6 +91,6 @@ void Odometry() {
         //LastHeading
         /*LastHeading = RHeading;*/
 
-        pros::delay(1);
+        pros::delay(5);
     }
 }
