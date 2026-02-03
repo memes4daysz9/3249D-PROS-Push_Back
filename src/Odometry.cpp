@@ -8,8 +8,8 @@ const double GearRatio = 0.8;
 
 void Odometry() {
 
-    pros::MotorGroup LeftEnc({-1, -3, -5});
-    pros::MotorGroup RightEnc({2, 4, 6});
+    pros::MotorGroup LeftEnc({1, -3, -5});
+    pros::MotorGroup RightEnc({-2, 4, 6});
     pros::Imu IMUa(12);
     pros::Imu IMUb(11);
 

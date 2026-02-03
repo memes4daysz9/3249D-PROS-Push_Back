@@ -12,8 +12,8 @@ extern bool Rel_Move(double Distance){
     //theres more magic in these numbers than normal magic numbers
     
 
-	pros::MotorGroup LeftMG({-1, -3, -5});
-	pros::MotorGroup RightMG({2, 4, 6});
+	pros::MotorGroup LeftMG({1, -3, -5});
+	pros::MotorGroup RightMG({-2, 4, 6});
 
     
     const double BaseDistance = OdomDistance.load();
@@ -58,8 +58,8 @@ extern bool Rel_Move(double Distance){
 
 
 extern bool Rel_Rotate(double Degrees){
-	pros::MotorGroup LeftMG({-1, -3, -5});
-	pros::MotorGroup RightMG({2, 4, 6});
+	pros::MotorGroup LeftMG({1, -3, -5});
+	pros::MotorGroup RightMG({-2, 4, 6});
     pros::screen::print(pros::E_TEXT_MEDIUM,5, "Error:              ");
 
     const double BaseHeading = (Heading.load());
@@ -107,8 +107,8 @@ extern bool Rel_Rotate(double Degrees){
 
 extern bool Abs_Rotate(double Degrees){
     //from where its starts, not where its on the field, otherwise id need 4 diff autons (also easier)
-	pros::MotorGroup LeftMG({-1, -3, -5});
-	pros::MotorGroup RightMG({2, 4, 6});
+	pros::MotorGroup LeftMG({1, -3, -5});
+	pros::MotorGroup RightMG({-2, 4, 6});
     pros::screen::print(pros::E_TEXT_MEDIUM,5, "Error:              ");
 
     double CurHeading = Heading.load();
@@ -154,8 +154,8 @@ extern bool Abs_Rotate(double Degrees){
 }
 extern bool MatchLoad(int time) // time you want to matchload for
 {
-    pros::MotorGroup LeftMG({-1, -3, -5});
-	pros::MotorGroup RightMG({2, 4, 6});
+    pros::MotorGroup LeftMG({1, -3, -5});
+	pros::MotorGroup RightMG({-2, 4, 6});
     pros::Motor IntakeMotor(8,pros::v5::MotorGear::blue, pros::v5::MotorUnits::degrees);
     const int power = 3500; // voltage sent to both motors to move
     const int PreDelay = 750;
@@ -176,8 +176,8 @@ extern bool MatchLoad(int time) // time you want to matchload for
 
 extern bool AFinished(int Left, int Right)
 {
-    pros::MotorGroup LeftMG({-1, -3, -5});
-	pros::MotorGroup RightMG({2, 4, 6});
+    pros::MotorGroup LeftMG({1, -3, -5});
+	pros::MotorGroup RightMG({-2, 4, 6});
     LeftMG.set_brake_mode(MOTOR_BRAKE_HOLD);
     RightMG.set_brake_mode(MOTOR_BRAKE_HOLD);
     LeftMG.move_voltage(Left * -1500);

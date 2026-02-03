@@ -12,6 +12,18 @@
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+/*bool MotorsOK = true;
+void MotorChecker() // checks motor temps to see if they are comp ready
+{
+	while (1)
+	{
+		//int LeftMax = math.max()
+		
+	}
+}
+*/
+
+
 void initialize() {
 	pros::delay(150); // this makes sure system devices initialize before this, ironically itll just skip things in here bc RTOS and the screen arent initialized yet
 	pros::screen::set_pen(0x00ffffff);
@@ -60,46 +72,6 @@ void competition_initialize() {}
  */
 
 
-/*			Rotation PID testing			*/
-
-/*void autonomous() {
-	Rel_Rotate(15);
-	Rel_Rotate(-15);
-	Rel_Rotate(45);
-	Rel_Rotate(-45);
-	Rel_Rotate(90);
-	Rel_Rotate(-90);
-	Rel_Rotate(145);
-	Rel_Rotate(-145);
-	Rel_Rotate(180);
-	Rel_Rotate(-180);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
-}*/
-// to be moved to another file
-
-/*			Straight			*/
-/*void autonomous()
-{
-	pros::Motor IntakeMotor(7,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
-	pros::Motor HighGoalMotor(8,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
-
-	Rel_Move(5);
-	Rel_Move(-5);
-	Rel_Move(10);
-	Rel_Move(-10);
-	Rel_Move(20);
-	Rel_Move(-20);
-	Rel_Move(40);
-	Rel_Move(-40);
-	Rel_Move(65);
-	Rel_Move(-65);
-}*/
-
-/*void autonomous()
-{
-	Rel_Move(20);
-	Rel_Rotate(180);
-	Rel_Move(20);
-}*/
 
 											/*			Left Side			*/
 
@@ -112,7 +84,7 @@ void competition_initialize() {}
 
 											/*			Right Side			*/
 											
-void autonomous(){
+/*void autonomous(){
 	pros::Motor HoodMotor(7,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
 	pros::Motor IntakeMotor(8,pros::v5::MotorGear::blue, pros::v5::MotorUnits::degrees);
 	pros::adi::Pneumatics WingsPiston('c',false); // starts retracted
@@ -120,98 +92,65 @@ void autonomous(){
 	pros::adi::Pneumatics MatchLoaderPiston('a',false);
 	pros::MotorGroup LeftMG({-1, -3, -5});
 	pros::MotorGroup RightMG({2, 4, 6});
-	Rel_Move(24);
-	Rel_Rotate(-5);
 	IntakeMotor.move_voltage(12000);
+	Rel_Move(24);
+	Rel_Rotate(-14);
 	Rel_Move(3.25);
 	Rel_Rotate(-19);
 	Rel_Move(5);
 	Rel_Move(7);
-	Rel_Rotate(-114);
-	Rel_Move(36);
-	Rel_Rotate(-40);
-	Rel_Move(-20);
+	Rel_Rotate(-90);
+	Rel_Move(24);
+	Rel_Rotate(-53.5);
+	Rel_Move(-8.75);
+	pros::delay(200);
+	LeftMG.move_voltage(-12000);
+	RightMG.move_voltage(-12000);
 	HoodMotor.move_voltage(12000);
-	pros::delay(1500);
+	pros::delay(3500);
 	HoodMotor.move_voltage(0);
-	Rel_Move(19);
-	MatchLoaderPiston.extend();
-	pros::delay(1500);
-	LeftMG.move_voltage(12000);
-	RightMG.move_voltage(12000);
-	pros::delay(250);
-	LeftMG.move_voltage(0);
-	RightMG.move_voltage(0);
-	MatchLoad(3);
-	//untested
-	Rel_Move(24);
-	HoodMotor.move_voltage(12000);
-	
-}
-
-/*void autonomous()
-{
-	pros::Motor HoodMotor(7,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
-	pros::Motor IntakeMotor(8,pros::v5::MotorGear::blue, pros::v5::MotorUnits::degrees);
-	pros::adi::Pneumatics WingsPiston('c',false); // starts retracted
-	pros::adi::Pneumatics MiddleScorePiston('b',true); // starts extended
-	pros::adi::Pneumatics MatchLoaderPiston('a',false);
-
-	Rel_Move(24);
-	Rel_Rotate(19);
-	IntakeMotor.move_voltage(12000);
-	Rel_Move(5);
-	Rel_Rotate(10);
-	Rel_Move(5);
-	Rel_Rotate(90);
-	Rel_Move(34);
-
-	Rel_Rotate(40);
-	MatchLoaderPiston.extend();
-	pros::delay(750);
-	Rel_Move(5.5);
-	MatchLoad(2);// 2 seconds
-	Rel_Move(-24);
-
 }*/
 
 
-											/*			Right Side AWP			*/
-/*void autonomous()
+											/*			Left Side		*/
+
+void autonomous()//should maybe work????
 {
 	pros::Motor HoodMotor(7,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
 	pros::Motor IntakeMotor(8,pros::v5::MotorGear::blue, pros::v5::MotorUnits::degrees);
 	pros::adi::Pneumatics WingsPiston('c',false); // starts retracted
 	pros::adi::Pneumatics MiddleScorePiston('b',true); // starts extended
 	pros::adi::Pneumatics MatchLoaderPiston('a',false);
-	
-	Rel_Move(60);
-	Rel_Rotate(-90);
-	MatchLoaderPiston.extend();
-	Rel_Move(21.5);
-	MatchLoad(2);
-	Rel_Move(-48);
-	MatchLoaderPiston.retract();
+	pros::MotorGroup LeftMG({-1, -3, -5});
+	pros::MotorGroup RightMG({2, 4, 6});
+	WingsPiston.extend();
 	IntakeMotor.move_voltage(12000);
+	Rel_Move(24);
+	Rel_Rotate(14);
+	Rel_Move(3.25);
+	Rel_Rotate(19);
+	Rel_Move(5);
+	Rel_Move(7);
+	Rel_Rotate(90);
+	Rel_Move(26);
+	Rel_Rotate(57);
+	Rel_Move(-8.5);
+	pros::delay(200);
+	LeftMG.move_voltage(-12000);
+	RightMG.move_voltage(-12000);
 	HoodMotor.move_voltage(12000);
-	pros::delay(3000);
+	pros::delay(3500);
 	HoodMotor.move_voltage(0);
-	Rel_Move(24);
-	
-	Rel_Rotate(145);
-	Rel_Move(24);
-	Rel_Rotate(5);
-	Rel_Move(5);
-	Rel_Move(-5);
-	Rel_Rotate(-10);
-	Rel_Move(5);
-	Rel_Move(-5);
-	IntakeMotor.move_voltage(0);
-	Rel_Rotate(5);
-	Rel_Move(18);
-	IntakeMotor.move_voltage(-12000);
+
 }
-*/
+
+
+/*
+void autonomous(){ // in case of AWP
+	Rel_Move(5);
+}
+
+
 
 				/*			Testing Matchloading			*/
 
@@ -264,8 +203,8 @@ void opcontrol()
 {
 	pros::Controller MainCont(pros::E_CONTROLLER_MASTER);
 	pros::Controller SideCont(pros::E_CONTROLLER_PARTNER);
-	pros::MotorGroup LeftMG({-1, -3, -5}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-	pros::MotorGroup RightMG({2, 4, 6}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+	pros::MotorGroup LeftMG({1, -3, -5}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+	pros::MotorGroup RightMG({-2, 4, 6}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 	pros::Motor HoodMotor(7,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
 	pros::Motor IntakeMotor(8,pros::v5::MotorGear::blue, pros::v5::MotorUnits::degrees);
 	pros::adi::Pneumatics WingsPiston('c',false); // starts retracted
@@ -285,6 +224,10 @@ void opcontrol()
 	double RightWattage = 0;
 	double WattageDiff = 0;
 
+	bool WingsPressed;
+	bool MiddlePressed; // toggle functions
+	bool MatchPressed;
+
 	while (true) 
 	{
 
@@ -299,27 +242,53 @@ void opcontrol()
 
 		if ((MainCont.get_digital(PlayerSwapA)) && (SideCont.get_digital(PlayerSwapA)))
 		{
-			Toggle2ndPlayer();
+			Toggle2ndPlayer();// Switch main driver
 		}
+		if (MainCont.get_digital(DIGITAL_UP) || SideCont.get_digital(DIGITAL_UP)) T = T * 0.75;//lowers max turn ability for more precision while using the wing
 		left = F + T;
 		right = F - T;
 
 		LeftMG.move((100*(((1-curve)*left)/100+(curve*pow(left/100,mod)))));
-		RightMG.move((100*(((1-curve)*right)/100+(curve*pow(right/100,mod)))));
-
-		HoodMotor.move_velocity((MainCont.get_digital(HoodButton) - MainCont.get_digital(InverseHoodButton) + MainCont.get_digital(ScoreButton) - MainCont.get_digital(InverseScoreButton) - Player2) + (SideCont.get_digital(HoodButton) - SideCont.get_digital(InverseHoodButton) + SideCont.get_digital(ScoreButton) - SideCont.get_digital(InverseScoreButton) + Player2) * 600);
+		RightMG.move((100*(((1-curve)*right)/100+(curve*pow(right/100,mod)))));		
 
 
-		/*			Utility Motor Functions			*/
+					/*			Utility Motor Functions			*/
 		HoodMotor.move_velocity(((MainCont.get_digital(HoodButton) + MainCont.get_digital(ScoreButton) + SideCont.get_digital(HoodButton) + SideCont.get_digital(ScoreButton)) - (MainCont.get_digital(InverseHoodButton) + MainCont.get_digital(InverseScoreButton) + SideCont.get_digital(InverseHoodButton) + SideCont.get_digital(InverseScoreButton))) * 600);
 		//slightly long
 		//handles both controllers Movements involving these two motors
 		IntakeMotor.move_velocity(((MainCont.get_digital(IntakeButton) + MainCont.get_digital(ScoreButton) + SideCont.get_digital(IntakeButton) + SideCont.get_digital(ScoreButton)) - (MainCont.get_digital(InverseIntakeButton) + MainCont.get_digital(InverseScoreButton) + SideCont.get_digital(InverseIntakeButton) + SideCont.get_digital(InverseScoreButton))) * 600);;
 		
-		/*			Piston Functions		*/
-		if (MainCont.get_digital(WingsButton) || SideCont.get_digital(WingsButton)){WingsPiston.toggle(); pros::delay(150);}
-		if (MainCont.get_digital(MiddleScoreButton) || SideCont.get_digital(MiddleScoreButton)){MiddleScorePiston.toggle(); pros::delay(150);}
-		if (MainCont.get_digital(MatchLoaderButton) || SideCont.get_digital(MatchLoaderButton)){MatchLoaderPiston.toggle(); pros::delay(150);}
+					/*			Piston Functions		*/
+		
+		if ((MainCont.get_digital(WingsButton) || SideCont.get_digital(WingsButton)) && !WingsPressed)// detects rising edge of either button pressed
+		{
+			WingsPressed = true;// stops looping it
+			WingsPiston.toggle();
+			pros::delay(50);// in case of debounce (where when released the buttons contacts touch a couple times)
+		}else if (!MainCont.get_digital(WingsButton) || !SideCont.get_digital(WingsButton))
+		{
+			WingsPressed = false;
+		}
+		
+		if ((MainCont.get_digital(MiddleScoreButton) || SideCont.get_digital(MiddleScoreButton)) && !MiddlePressed)// detects rising edge of either button pressed
+		{
+			MiddlePressed = true;// stops looping it
+			MiddleScorePiston.toggle();
+			pros::delay(50);// in case of debounce (where when released the buttons contacts touch a couple times)
+		}else if (!MainCont.get_digital(MiddleScoreButton) || !SideCont.get_digital(MiddleScoreButton))
+		{
+			MiddlePressed = false;
+		}
+
+		if ((MainCont.get_digital(MatchLoaderButton) || SideCont.get_digital(MatchLoaderButton)) && !MatchPressed)// detects rising edge of either button pressed
+		{
+			MatchPressed = true;// stops looping it
+			MatchLoaderPiston.toggle();
+			pros::delay(50);// in case of debounce (where when released the buttons contacts touch a couple times)
+		}else if (!MainCont.get_digital(MatchLoaderButton) || !SideCont.get_digital(MatchLoaderButton))
+		{
+			MatchPressed = false;
+		}
 
 
 		/*			Screen Functions			*/

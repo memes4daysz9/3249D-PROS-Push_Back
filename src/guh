@@ -1,1 +1,0 @@
-(SideCont.get_digital(HoodButton) - SideCont.get_digital(InverseHoodButton) + SideCont.get_digital(ScoreButton) - SideCont.get_digital(InverseScoreButton) + Player2)
