@@ -28,7 +28,7 @@ void initialize() {
 	pros::delay(150); // this makes sure system devices initialize before this, ironically itll just skip things in here bc RTOS and the screen arent initialized yet
 	pros::screen::set_pen(0x00ffffff);
 	pros::screen::print(pros::E_TEXT_MEDIUM,1, "latest Time working on the code: 2:33AM");
-	pros::Imu IMUa(12);
+	pros::Imu IMUa(7);
     pros::Imu IMUb(13);
 
 	IMUa.reset(true);
@@ -59,19 +59,8 @@ void disabled()
  */
 void competition_initialize() {}
 
-/**
- * Runs the user autonomous code. This function will be started in its own task
- * with the default priority and stack size whenever the robot is enabled via
- * the Field Management System or the VEX Competition Switch in the autonomous
- * mode. Alternatively, this function may be called in initialize or opcontrol
- * for non-competition testing purposes.
- *
- * If the robot is disabled or communications is lost, the autonomous task
- * will be stopped. Re-enabling the robot will restart the task, not re-start it
- * from where it left off.
- */
 
-
+																				/*			Autonomous			*/
 
 											/*			Left Side			*/
 
@@ -121,8 +110,8 @@ void autonomous()//should maybe work????
 	pros::adi::Pneumatics WingsPiston('c',false); // starts retracted
 	pros::adi::Pneumatics MiddleScorePiston('b',true); // starts extended
 	pros::adi::Pneumatics MatchLoaderPiston('a',false);
-	pros::MotorGroup LeftMG({-1, -3, -5});
-	pros::MotorGroup RightMG({2, 4, 6});
+	pros::MotorGroup LeftMG({1, 3, 5});
+	pros::MotorGroup RightMG({-2, -4, -6});
 	WingsPiston.extend();
 	IntakeMotor.move_voltage(12000);
 	Rel_Move(24);
@@ -163,21 +152,7 @@ void autonomous(){ // in case of AWP
 
 }*/
 
-
-/**
- * Runs the operator control code. This function will be started in its own task
- * with the default priority and stack size whenever the robot is enabled via
- * the Field Management System or the VEX Competition Switch in the operator
- * control mode.
- *
- * If no competition control is connected, this function will run immediately
- * following initialize().
- *
- * If the robot is disabled or communications is lost, the
- * operator control task will be stopped. Re-enabling the robot will restart the
- * task, not resume it from where it left off.
- */
-
+												/*			Driver Control			*/
 bool Player2 = 0;
 
 bool Toggle2ndPlayer(){
@@ -198,14 +173,13 @@ bool Toggle2ndPlayer(){
 	return true;
 }
 
-
 void opcontrol()
 {
 	pros::Controller MainCont(pros::E_CONTROLLER_MASTER);
 	pros::Controller SideCont(pros::E_CONTROLLER_PARTNER);
 	pros::MotorGroup LeftMG({1, -3, -5}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 	pros::MotorGroup RightMG({-2, 4, 6}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-	pros::Motor HoodMotor(7,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
+	pros::Motor HoodMotor(9,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
 	pros::Motor IntakeMotor(8,pros::v5::MotorGear::blue, pros::v5::MotorUnits::degrees);
 	pros::adi::Pneumatics WingsPiston('c',false); // starts retracted
 	pros::adi::Pneumatics MiddleScorePiston('b',true); // starts extended
@@ -259,13 +233,14 @@ void opcontrol()
 		IntakeMotor.move_velocity(((MainCont.get_digital(IntakeButton) + MainCont.get_digital(ScoreButton) + SideCont.get_digital(IntakeButton) + SideCont.get_digital(ScoreButton)) - (MainCont.get_digital(InverseIntakeButton) + MainCont.get_digital(InverseScoreButton) + SideCont.get_digital(InverseIntakeButton) + SideCont.get_digital(InverseScoreButton))) * 600);;
 		
 					/*			Piston Functions		*/
-		
+
+		// this totally isnt copy pasted trust me bro
+
 		if ((MainCont.get_digital(WingsButton) || SideCont.get_digital(WingsButton)) && !WingsPressed)// detects rising edge of either button pressed
 		{
 			WingsPressed = true;// stops looping it
 			WingsPiston.toggle();
-			pros::delay(50);// in case of debounce (where when released the buttons contacts touch a couple times)
-		}else if (!MainCont.get_digital(WingsButton) || !SideCont.get_digital(WingsButton))
+		}else if (!MainCont.get_digital(WingsButton) && !SideCont.get_digital(WingsButton))
 		{
 			WingsPressed = false;
 		}
@@ -274,8 +249,7 @@ void opcontrol()
 		{
 			MiddlePressed = true;// stops looping it
 			MiddleScorePiston.toggle();
-			pros::delay(50);// in case of debounce (where when released the buttons contacts touch a couple times)
-		}else if (!MainCont.get_digital(MiddleScoreButton) || !SideCont.get_digital(MiddleScoreButton))
+		}else if (!MainCont.get_digital(MiddleScoreButton) && !SideCont.get_digital(MiddleScoreButton))
 		{
 			MiddlePressed = false;
 		}
@@ -284,8 +258,7 @@ void opcontrol()
 		{
 			MatchPressed = true;// stops looping it
 			MatchLoaderPiston.toggle();
-			pros::delay(50);// in case of debounce (where when released the buttons contacts touch a couple times)
-		}else if (!MainCont.get_digital(MatchLoaderButton) || !SideCont.get_digital(MatchLoaderButton))
+		}else if (!MainCont.get_digital(MatchLoaderButton) && !SideCont.get_digital(MatchLoaderButton))
 		{
 			MatchPressed = false;
 		}

@@ -189,5 +189,4 @@ extern bool AFinished(int Left, int Right)
     LeftMG.set_brake_mode(MOTOR_BRAKE_COAST);
     RightMG.set_brake_mode(MOTOR_BRAKE_COAST);
     return true;
-
 }
