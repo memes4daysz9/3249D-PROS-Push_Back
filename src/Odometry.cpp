@@ -4,12 +4,12 @@
 
 constexpr double TrackerRadius = 3.25 / 2;
 const double LRDis = 17.5;
-const double GearRatio = 0.8;
+constexpr double GearRatio = 480.0 / 600.0;
 
 void Odometry() {
 
-    pros::MotorGroup LeftEnc({1, -3, -5});
-    pros::MotorGroup RightEnc({-2, 4, 6});
+    pros::Motor LeftEnc(1);
+    pros::Motor RightEnc(-2);
     pros::Imu IMUa(12);
     pros::Imu IMUb(11);
 
@@ -29,6 +29,8 @@ void Odometry() {
     double LocalOffsetX;
     double LocalOffsetY;
     double AvgHeading;
+    X.store(0);
+    Y.store(0);
 
     pros::screen::print(pros::E_TEXT_MEDIUM, 2, "Odometry started!");
 
@@ -71,9 +73,8 @@ void Odometry() {
         LastR = RDeg;
         LastHeading = IMURad;
 
-        pros::screen::print(pros::E_TEXT_MEDIUM, 7, "RDeg: %f   LDeg: %f", RDeg, LDeg);
-        pros::screen::print(pros::E_TEXT_MEDIUM, 8, "X: %f Y: %f H: %f", X.load(), Y.load(), IMUDeg);
-
-        pros::delay(1);
+        pros::screen::print(pros::E_TEXT_MEDIUM,3, "X: %f, Y: %f, Heading: %f" , X.load(), Y.load(), Heading.load());
+        
+        pros::delay(8);
     }
 }

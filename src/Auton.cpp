@@ -6,9 +6,10 @@ double loadXY(){
 }
 
 extern bool Rel_Move(double Distance){
+    Distance = Distance + 1;//idk why this is needed
     double pol = sgn(Distance);
     // temp fixing the odom / wheel problem
-    Distance = (fabs(Distance) - ((0.175 * fabs(Distance)) - 0.8453)) * pol; // we DO NOT TOUCH THIS
+    //Distance = (fabs(Distance) - ((0.175 * fabs(Distance)) - 0.8453)) * pol; // we DO NOT TOUCH THIS
     //theres more magic in these numbers than normal magic numbers
     
 
@@ -16,29 +17,29 @@ extern bool Rel_Move(double Distance){
 	pros::MotorGroup RightMG({-2, 4, 6});
 
     
-    const double BaseDistance = OdomDistance.load();
+    const double BaseDistance = sqrt(pow(X.load(),2) + pow(Y.load(),2));
     double CurDistance = 0;
 
     const int MinP = 1700; //temp
     const double kP = 450;//450
-    const double kI = 0;//0.1
+    const double kI = 0.2;//0.1
     const double kD = 300; //300
     double i = 0;
     double Output;
 
     const double Target = Distance;
     double error = Target - CurDistance;
-    const double Dscaler = 0.025; // 25 ms
     double LastError = 0;
     pros::screen::print(pros::E_TEXT_MEDIUM,5, "Error:  %f              ",error);
-    pros::screen::print(pros::E_TEXT_MEDIUM,6, "Distance: %f",pol);
+    
     
 
 
     while (abs(error) > StraightTolerance) {
-        CurDistance = OdomDistance.load() - BaseDistance;
+        CurDistance = sqrt(pow(X.load(),2) + pow(Y.load(),2)) - BaseDistance;
         error = Target - CurDistance;
         pros::screen::print(pros::E_TEXT_MEDIUM,5, "Error:  %f", error);
+        pros::screen::print(pros::E_TEXT_MEDIUM,6, "Distance: %f",CurDistance);
 
         i += error;
         double Output = (error * kP) +(i * kI) +((error - LastError) * kD) +(MinP * sgn(error));
@@ -50,7 +51,9 @@ extern bool Rel_Move(double Distance){
         LastError = error;
         pros::delay(25);
     }
-    OdomDistance.store(0);// resets value for next loop
+    pros::screen::print(pros::E_TEXT_MEDIUM,5, "Error:  %f", error);
+    //X.store(0);// resets value for next loop
+    //Y.store(0);
     AFinished(sgn(Distance), sgn(Distance));
     return true;
 }

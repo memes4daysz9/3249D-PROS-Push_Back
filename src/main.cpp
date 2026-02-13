@@ -28,7 +28,7 @@ void initialize() {
 	pros::delay(150); // this makes sure system devices initialize before this, ironically itll just skip things in here bc RTOS and the screen arent initialized yet
 	pros::screen::set_pen(0x00ffffff);
 	pros::screen::print(pros::E_TEXT_MEDIUM,1, "latest Time working on the code: 2:33AM");
-	pros::Imu IMUa(7);
+	pros::Imu IMUa(12);
     pros::Imu IMUb(13);
 
 	IMUa.reset(true);
@@ -103,7 +103,7 @@ void competition_initialize() {}
 
 											/*			Left Side		*/
 
-void autonomous()//should maybe work????
+/*void autonomous()//should maybe work????
 {
 	pros::Motor HoodMotor(7,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
 	pros::Motor IntakeMotor(8,pros::v5::MotorGear::blue, pros::v5::MotorUnits::degrees);
@@ -131,12 +131,12 @@ void autonomous()//should maybe work????
 	pros::delay(3500);
 	HoodMotor.move_voltage(0);
 
-}
+}*/
 
 
-/*
+
 void autonomous(){ // in case of AWP
-	Rel_Move(5);
+	Rel_Move(10);
 }
 
 
@@ -158,8 +158,8 @@ bool Player2 = 0;
 bool Toggle2ndPlayer(){
 	pros::Controller MainCont(pros::E_CONTROLLER_MASTER);
 	pros::Controller SideCont(pros::E_CONTROLLER_PARTNER);
-	pros::MotorGroup LeftMG({-1, -3, -5}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-	pros::MotorGroup RightMG({2, 4, 6}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+	pros::MotorGroup LeftMG({1, -3, -5}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+	pros::MotorGroup RightMG({-2, 4, 6}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 	LeftMG.set_brake_mode(MOTOR_BRAKE_HOLD);
     RightMG.set_brake_mode(MOTOR_BRAKE_HOLD);
 	LeftMG.brake();// so 
@@ -179,7 +179,7 @@ void opcontrol()
 	pros::Controller SideCont(pros::E_CONTROLLER_PARTNER);
 	pros::MotorGroup LeftMG({1, -3, -5}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 	pros::MotorGroup RightMG({-2, 4, 6}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-	pros::Motor HoodMotor(9,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
+	pros::Motor HoodMotor(7,pros::v5::MotorGears::blue,pros::v5::MotorEncoderUnits::degrees);
 	pros::Motor IntakeMotor(8,pros::v5::MotorGear::blue, pros::v5::MotorUnits::degrees);
 	pros::adi::Pneumatics WingsPiston('c',false); // starts retracted
 	pros::adi::Pneumatics MiddleScorePiston('b',true); // starts extended
@@ -271,7 +271,7 @@ void opcontrol()
 		LeftWattage = LeftMG.get_power();
 		RightWattage = RightMG.get_power();
 
-		pros::screen::print(pros::E_TEXT_MEDIUM,3, "X: %f, Y: %f, Heading: %f" , x, y, heading);
+		
 		pros::screen::print(pros::E_TEXT_MEDIUM,4,"Total Power Left-Side: %f", LeftWattage);
 		pros::screen::print(pros::E_TEXT_MEDIUM,5,"Total Power Right-Side: %f", RightWattage);
 		pros::screen::print(pros::E_TEXT_MEDIUM,6,"Wattage Diff: %f", abs(RightWattage - LeftWattage) / 3);
