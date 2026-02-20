@@ -100,14 +100,14 @@ void competition_initialize() {}
 	Rel_Move(5);
 	Rel_Move(7);
 	Rel_Rotate(-90);
-	Rel_Move(24);
-	Rel_Rotate(-53.5);
-	Rel_Move(-8.75);
+	Rel_Move(26);
+	Rel_Rotate(-57);
+	Rel_Move(-8.5);
 	pros::delay(200);
 	LeftMG.move_voltage(-12000);
 	RightMG.move_voltage(-12000);
 	HoodMotor.move_voltage(12000);
-	pros::delay(3500);
+	pros::delay(4000);
 	HoodMotor.move_voltage(0);
 }*/
 
@@ -139,7 +139,7 @@ void autonomous()//should maybe work????
 	LeftMG.move_voltage(-12000);
 	RightMG.move_voltage(-12000);
 	HoodMotor.move_voltage(12000);
-	pros::delay(3500);
+	pros::delay(4000);
 	HoodMotor.move_voltage(0);
 
 }
